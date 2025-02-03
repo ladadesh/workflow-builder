@@ -1,35 +1,62 @@
-import React, { useState } from "react";
-import WorkflowEditor from "./components/WorkflowEditor";
+import React from "react";
+import Header from "./components/Header";
+import AddNodeButtons from "./components/AddNodeButtons";
+import { WorkflowCanvas } from "./components/WorkflowCanvas";
+import { Box, Button } from "@mui/material";
 import WorkflowTable from "./components/WorkflowTable";
-
-const sampleWorkflows = [
-  {
-    id: "1",
-    name: "Approval Process",
-    status: "Active",
-    createdAt: "2024-01-15",
-  },
-  {
-    id: "2",
-    name: "Email Notification",
-    status: "Inactive",
-    createdAt: "2024-01-10",
-  },
-];
+import { useDispatch, useSelector } from "react-redux";
+import { undo } from "./redux/workflowSlice";
 
 function App() {
-  const [workflows, setWorkflows] = useState(sampleWorkflows);
-  const [selectedWorkflow, setSelectedWorkflow] = useState(null);
-
+  const nodes = useSelector((state) => state.workflow.nodes);
+  const dispatch = useDispatch();
   return (
-    <div style={{ padding: "20px" }}>
-      <h1>Workflow Automation Builder</h1>
+    <>
+      <Header />
+      <Box sx={{ margin: 0, padding: 0 }}>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: {
+              xs: "column", // Row direction on mobile
+              sm: "row", // Column direction on tablets and larger screens
+            },
+            justifyContent: "start",
+            alignItems: "center",
+            height: "80%",
+            position: "relative",
+          }}
+        >
+          <AddNodeButtons />
 
-      <h2>Available Workflows</h2>
-      <WorkflowTable workflows={workflows} onSelect={setSelectedWorkflow} />
-
-      <WorkflowEditor key={selectedWorkflow?.id} />
-    </div>
+          <Box sx={{ position: "absolute", bottom: "0" }}>
+            <Button
+              variant="outlined"
+              onClick={() => {
+                dispatch(undo());
+                dispatch(undo());
+              }}
+            >
+              Undo
+            </Button>
+          </Box>
+          <WorkflowCanvas />
+        </Box>
+        {nodes?.length > 0 && (
+          <div
+            style={{
+              padding: "10px",
+              display: "flex",
+              alignItems: "center",
+              flexDirection: "column",
+            }}
+          >
+            <h2 style={{ paddingTop: "10px" }}>Workflow Summary</h2>
+            <WorkflowTable />
+          </div>
+        )}
+      </Box>
+    </>
   );
 }
 

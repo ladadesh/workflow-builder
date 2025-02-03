@@ -1,48 +1,129 @@
-import React from "react";
-import { useTable, useSortBy } from "react-table";
+import React, { useEffect, useState } from "react";
+import {
+  useReactTable,
+  getCoreRowModel,
+  flexRender,
+} from "@tanstack/react-table";
+import { useSelector, useDispatch } from "react-redux";
+import { updateNode, removeNode } from "../redux/workflowSlice";
+import {
+  Table,
+  TableHead,
+  TableRow,
+  TableCell,
+  TableBody,
+  TextField,
+  IconButton,
+  Paper,
+  TableContainer,
+} from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
 
-const WorkflowTable = ({ workflows, onSelect }) => {
-  const columns = React.useMemo(
-    () => [
-      { Header: "Name", accessor: "name" },
-      { Header: "Status", accessor: "status" },
-      { Header: "Created At", accessor: "createdAt" },
-    ],
-    []
-  );
+const WorkflowTable = () => {
+  const dispatch = useDispatch();
+  const nodes = useSelector((state) => state.workflow.nodes);
+  const [data, setData] = useState(nodes);
 
-  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
-    useTable({ columns, data: workflows }, useSortBy);
+  useEffect(() => {
+    setData(nodes);
+  }, [nodes]);
+
+  // Update Redux state onBlur rather than on every change
+  const updateData = (rowIndex, columnId, value) => {
+    // Create the updated row
+    let currUpdateRow = {};
+    const updatedData = data.map((row, index) =>
+      index === rowIndex
+        ? { ...row, data: (currUpdateRow = { ...row.data, [columnId]: value }) }
+        : row
+    );
+    setData(updatedData);
+    // Dispatch the update with the updated row's data and its id
+    dispatch(updateNode({ ...currUpdateRow, id: nodes[rowIndex].id }));
+  };
+
+  const columns = [
+    {
+      header: "Node Type",
+      accessorKey: "type",
+      cell: ({ getValue }) => <span>{getValue()}</span>,
+    },
+    {
+      header: "Node Name",
+      accessorKey: "data.name",
+      cell: ({ getValue, row }) => (
+        <TextField
+          variant="outlined"
+          size="small"
+          fullWidth
+          defaultValue={getValue() || ""}
+          onBlur={(e) => updateData(row.index, "name", e.target.value)}
+        />
+      ),
+    },
+    {
+      header: "Node Description",
+      accessorKey: "data.description",
+      cell: ({ getValue, row }) => (
+        <TextField
+          variant="outlined"
+          size="small"
+          fullWidth
+          placeholder="Enter description"
+          defaultValue={getValue() || ""}
+          onBlur={(e) => updateData(row.index, "description", e.target.value)}
+        />
+      ),
+    },
+    {
+      header: "Actions",
+      cell: ({ row }) => (
+        <IconButton
+          color="error"
+          onClick={() => dispatch(removeNode(row.original.id))}
+        >
+          <DeleteIcon />
+        </IconButton>
+      ),
+    },
+  ];
+
+  const table = useReactTable({
+    data,
+    columns,
+    getCoreRowModel: getCoreRowModel(),
+  });
 
   return (
-    <table
-      {...getTableProps()}
-      style={{ width: "100%", border: "1px solid #ddd", marginTop: "20px" }}
-    >
-      <thead>
-        {headerGroups.map((headerGroup) => (
-          <tr {...headerGroup.getHeaderGroupProps()}>
-            {headerGroup.headers.map((column) => (
-              <th {...column.getHeaderProps(column.getSortByToggleProps())}>
-                {column.render("Header")}
-              </th>
-            ))}
-          </tr>
-        ))}
-      </thead>
-      <tbody {...getTableBodyProps()}>
-        {rows.map((row) => {
-          prepareRow(row);
-          return (
-            <tr {...row.getRowProps()} onClick={() => onSelect(row.original)}>
-              {row.cells.map((cell) => (
-                <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
+    <TableContainer component={Paper} sx={{ mt: 2, p: 2 }}>
+      <Table>
+        <TableHead>
+          {table.getHeaderGroups().map((headerGroup) => (
+            <TableRow key={headerGroup.id}>
+              {headerGroup.headers.map((header) => (
+                <TableCell key={header.id} sx={{ fontWeight: "bold" }}>
+                  {flexRender(
+                    header.column.columnDef.header,
+                    header.getContext()
+                  )}
+                </TableCell>
               ))}
-            </tr>
-          );
-        })}
-      </tbody>
-    </table>
+            </TableRow>
+          ))}
+        </TableHead>
+        <TableBody>
+          {table.getRowModel().rows.map((row) => (
+            <TableRow key={row.id}>
+              {row.getVisibleCells().map((cell) => (
+                <TableCell key={cell.id}>
+                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                </TableCell>
+              ))}
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
   );
 };
 

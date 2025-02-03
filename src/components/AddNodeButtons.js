@@ -11,10 +11,19 @@ export default function AddNodeButtons() {
 
   return (
     <Stack
-      direction="column"
+      direction={{ xs: "row", sm: "column" }}
       spacing={1}
-      alignSelf="flex-start"
-      sx={{ padding: "100px 50px", position: "relative" }}
+      sx={{
+        padding: {
+          xs: "20px",
+          sm: "100px 50px",
+        },
+        position: "relative",
+        alignSelf: {
+          xs: "center",
+          sm: "flex-start",
+        },
+      }}
     >
       <Typography variant="h6" sx={{ alignSelf: "center" }}>
         Add Node

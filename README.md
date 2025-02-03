@@ -1,70 +1,120 @@
-# Getting Started with Create React App
+# Workflow Builder
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A workflow automation builder built with React that lets users visually create, edit, update, and manage workflows. The application leverages a variety of modern libraries including React Flow, React Table, Material UI, and React Hook Form to provide an intuitive and interactive experience.
 
-## Available Scripts
+## Features
 
-In the project directory, you can run:
+- **Visual Workflow Editor**:  
+  Create and manage workflow nodes using a drag-and-drop interface powered by [React Flow](https://reactflow.dev/).
 
-### `npm start`
+- **Node Management**:
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+  - **Add Nodes**: Add new nodes of different types (Task, Condition, Notification) to your workflow.
+  - **Edit Nodes**: Update node details (name, description, etc.) via an inline editing interface.
+  - **Delete Nodes**: Remove unwanted nodes along with their associated edges.
+  - **Update Nodes via Table**: Edit node data directly from a table view powered by [React Table](https://tanstack.com/table).
+  - **Undo Changes**: Revert the last changes with an undo feature.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+- **Form Handling**:  
+  Use [React Hook Form](https://react-hook-form.com/) to manage form state and validation for node details.
 
-### `npm test`
+- **Responsive Design**:  
+  Built with [Material UI](https://mui.com/) components ensuring a responsive and modern user interface.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Tech Stack
 
-### `npm run build`
+- **React**: JavaScript library for building user interfaces.
+- **React Flow Renderer**: Library for creating node-based UIs.
+- **React Table**: Headless UI for building powerful tables.
+- **Material UI**: React UI framework for building responsive layouts and components.
+- **React Hook Form**: Library for managing forms and validations.
+- **Redux Toolkit**: State management using Redux best practices.
+- **Other Libraries**:
+  - @mui/x-date-pickers
+  - @emotion/react & @emotion/styled
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Installation
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+1. **Clone the Repository**
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+   ```bash
+   git clone https://github.com/your-username/workflow-builder.git
+   cd workflow-builder
+   ```
 
-### `npm run eject`
+2. **Install Dependencies**
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+   ```bash
+   npm install
+   # or
+   yarn install
+   ```
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+3. **Run the Application**
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+   ```bash
+   npm start
+   # or
+   yarn start
+   ```
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+   The app should now be running at [http://localhost:3000](http://localhost:3000).
 
-## Learn More
+## Project Structure
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+A sample project structure might look like this:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+```
+workflow-builder/
+├── public/
+│   └── index.html
+├── src/
+│   ├── components/
+│   │   ├── WorkflowCanvas.js       // React Flow based workflow editor
+│   │   ├── WorkflowTable.js        // Editable React Table for node management
+│   │   ├── AddNodeButtons.js
+│   │   ├── Header.js
+│   │   ├── Node.js
+│   │   ├── Forms/
+│   │   │   ├── TaskForm.js         // Form for Task nodes using react-hook-form
+│   │   │   ├── ConditionForm.js    // Form for Condition nodes
+│   │   │   └── NotificationForm.js // Form for Notification nodes
+│   │   └── DrawerForm.js           // Drawer to show forms when a node is clicked
+│   ├── redux/
+│   │   └── workflowSlice.js         // Redux slice with undo, add, update, and remove logic
+│   ├── App.js
+│   ├── index.js
+│   └── ...
+├── package.json
+└── README.md
+```
 
-### Code Splitting
+## Usage
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+- **Adding a Node**:  
+  Click on the appropriate button or menu item to add a new node (e.g., Task, Condition, Notification).
 
-### Analyzing the Bundle Size
+- **Editing a Node**:  
+  Click on a node to open its detail form in a drawer. Edit the node’s properties (name, description, etc.) and submit the form.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+- **Updating via React Table**:  
+  Use the inline editable table to update node details directly.
 
-### Making a Progressive Web App
+- **Undo Changes**:  
+  Click the Undo button (positioned at the bottom of the screen) to revert the last change.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+## Contributing
 
-### Advanced Configuration
+Contributions are welcome! Feel free to fork the repository and submit a pull request with your improvements.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+## License
 
-### Deployment
+This project is licensed under the MIT License.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+## Acknowledgements
 
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- [React Flow](https://reactflow.dev/)
+- [React Table](https://tanstack.com/table)
+- [Material UI](https://mui.com/)
+- [React Hook Form](https://react-hook-form.com/)
+- [Redux Toolkit](https://redux-toolkit.js.org/)

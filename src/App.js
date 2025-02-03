@@ -29,17 +29,28 @@ function App() {
         >
           <AddNodeButtons />
 
-          <Box sx={{ position: "absolute", bottom: "0" }}>
-            <Button
-              variant="outlined"
-              onClick={() => {
-                dispatch(undo());
-                dispatch(undo());
+          {nodes?.length > 0 && (
+            <Box
+              sx={{
+                position: "absolute",
+                top: { xs: "90px", sm: "auto" }, // xs: use 90px from top; sm: disable top positioning
+                bottom: { xs: "auto", sm: "0" }, // xs: no bottom offset; sm: stick to bottom
+                right: { xs: "40%" },
+                left: { sm: "0" },
+                padding: "0 0 0 90px",
               }}
             >
-              Undo
-            </Button>
-          </Box>
+              <Button
+                variant="outlined"
+                onClick={() => {
+                  dispatch(undo());
+                  dispatch(undo());
+                }}
+              >
+                Undo
+              </Button>
+            </Box>
+          )}
           <WorkflowCanvas />
         </Box>
         {nodes?.length > 0 && (

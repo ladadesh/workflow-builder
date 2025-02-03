@@ -9,6 +9,7 @@ import {
   nodeClicked,
 } from "../redux/workflowSlice";
 import DrawerForm from "./DrawerForm";
+import { Box } from "@mui/material";
 
 export function WorkflowCanvas() {
   const dispatch = useDispatch();
@@ -70,7 +71,13 @@ export function WorkflowCanvas() {
   );
 
   return (
-    <div style={{ height: "80vh", width: "80%", margin: "0 auto" }}>
+    <Box
+      sx={{
+        height: { xs: "70vh", sm: "80vh" },
+        width: "80%",
+        margin: { xs: "40px 0 0 0", sm: "0 auto" },
+      }}
+    >
       <ReactFlow
         style={styles}
         nodes={nodes}
@@ -87,6 +94,6 @@ export function WorkflowCanvas() {
         <Background />
       </ReactFlow>
       <DrawerForm />
-    </div>
+    </Box>
   );
 }
